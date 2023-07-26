@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scamazon - Dashboard</title>
+  <!-- Bootstrap CSS link -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Scamazon</a>
+      <div class="navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <h1 class="text-center">Dashboard</h1>
+    <div class="text-center mt-4">
+      <button class="btn btn-primary" onclick="redirectToAddProduct()">Add Product</button>
+    </div>
+    <div class="row mt-5" id="productList">
+      <!-- Product cards will be dynamically displayed here -->
+    </div>
+  </div>
+
+  <script>
+    // JavaScript code for dashboard and logout remains the same
+    function logout() {
+      localStorage.removeItem('loggedInUser');
+      window.location.href = 'login.html';
+    }
+
+    // Function to delete a product
+    function deleteProduct(id) {
+      const productsData = JSON.parse(localStorage.getItem('productsData')) || [];
+      const updatedProducts = productsData.filter(product => product.id !== id);
+      localStorage.setItem('productsData', JSON.stringify(updatedProducts));
+      renderProductList();
+    }
+
+    // Function to edit a product
+    function editProduct(id) {
+      localStorage.setItem('editProductId', JSON.stringify(id));
+      window.location.href = 'editproduct.html';
+    }
+
+    // Function to redirect to payment page
+    function redirectToPayment() {
+      window.location.href = 'payment.html';
+    }
+
+    // Function to redirect to add product page
+    function redirectToAddProduct() {
+      window.location.href = 'addproducts.html';
+    }
+
+    // Function to render the product list
+    function renderProductList() {
+      const productsData = JSON.parse(localStorage.getItem('productsData')) || [];
+      const productListContainer = document.getElementById('productList');
+      productListContainer.innerHTML = '';
+
+      if (productsData.length === 0) {
+        productListContainer.innerHTML = '<p class="text-center">No products available.</p>';
+      } else {
+        productsData.forEach((product) => {
+          const card = `
+            <div class="col-md-4 mb-4">
+              <div class="card">
+                <img src="${product.image}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                  <h5 class="card-title">${product.name}</h5>
+                  <p class="card-text">${product.price}</p>
+                  <div class="text-center">
+                    <button class="btn btn-primary" onclick="editProduct(${product.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteProduct(${product.id})">Delete</button>
+                    <button class="btn btn-success" onclick="redirectToPayment()">Buy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          productListContainer.insertAdjacentHTML('beforeend', card);
+        });
+      }
+    }
+
+    // Render the product list on page load
+    document.addEventListener('DOMContentLoaded', renderProductList);
+  </script>
+</body>
+</html>

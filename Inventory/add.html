@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Inventory Website</a>
+            <p class="my-0">Welcome, <strong>User</strong>! <a href="index.html">Logout</a></p>
+        </nav>
+    </header>
+    <main class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">Add Product</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="addForm">
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price:</label>
+                                <input type="number" class="form-control" id="price" name="price" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Product</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="mt-4 text-center">
+    </footer>
+    <!-- Link to Bootstrap JS and jQuery (required for some Bootstrap features) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Add JavaScript code here for handling form submission and adding products
+        document.getElementById('addForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const productName = document.getElementById('name').value;
+            const productPrice = parseFloat(document.getElementById('price').value);
+            const productQuantity = parseInt(document.getElementById('quantity').value);
+
+            // Generate a new unique ID for the product
+            const productId = Date.now();
+
+            // Create a new product object
+            const newProduct = {
+                id: productId,
+                name: productName,
+                price: productPrice,
+                quantity: productQuantity
+            };
+
+            // Fetch existing products from localStorage
+            const existingProducts = JSON.parse(localStorage.getItem("products")) || [];
+
+            // Add the new product to the existing list
+            existingProducts.push(newProduct);
+
+            // Save the updated product list back to localStorage
+            localStorage.setItem("products", JSON.stringify(existingProducts));
+
+            alert("Product added successfully!");
+            window.location.href = "dashboard.html";
+        });
+    </script>
+</body>
+</html>
